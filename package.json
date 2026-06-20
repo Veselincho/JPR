@@ -1,0 +1,18 @@
+{
+  "name": "joinpukra",
+  "version": "1.0.0",
+  "description": "YouTube audio downloader",
+  "main": "main.js",
+  "scripts": {
+    "start": "node launch.js",
+    "postinstall": "node node_modules/electron/install.js"
+  },
+  "devDependencies": {
+    "electron": "^42.4.0"
+  },
+  "dependencies": {
+    "npm": "^11.17.0",
+    "run": "^1.5.0",
+    "start": "^5.1.0"
+  }
+}

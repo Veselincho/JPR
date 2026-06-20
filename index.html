@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>JоinPukRa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: #0c0a0f;
+      --bg-surface: #141118;
+      --bg-elevated: #1c1824;
+      --bg-input: #221e2c;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(0, 184, 255, 0.55);
+      --text: #ece8f4;
+      --text-muted: #8f879e;
+      --accent: #00b8ff;
+      --accent-glow: rgba(0, 184, 255, 0.25);
+      --success: #22c55e;
+      --success-hover: #16a34a;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --browse: #3b5bdb;
+      --browse-hover: #4c6ef5;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+      --glitch-bg: #120f17;
+      --after-duration: 9s;
+      --before-duration: 8s;
+      --after-shadow: -2px 0 rgba(255, 60, 90, 0.55);
+      --before-shadow: 2px 0 rgba(0, 200, 255, 0.55);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%; background: none;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 184, 255, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(239, 68, 68, 0.06), transparent),
+        var(--bg-base);
+      padding: 20px 22px 16px;
+      overflow: auto;
+      display: flex; flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ── Glitch title (React Bits–style, vanilla CSS) ── */
+    .header {
+      text-align: center;
+      margin-bottom: 4px;
+      padding: 4px 0 2px;
+      flex-shrink: 0;
+    }
+
+    .glitch-text {
+      position: relative;
+      display: inline-block;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #fff;
+      user-select: none;
+      line-height: 1.15;
+    }
+
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      color: #fff;
+      background: var(--glitch-bg);
+      overflow: hidden;
+      clip-path: inset(0 0 0 0);
+      opacity: 0.72;
+      pointer-events: none;
+    }
+
+    .glitch-text::before {
+      left: -3px;
+      text-shadow: var(--before-shadow);
+      animation: glitch-before var(--before-duration) infinite linear alternate-reverse;
+    }
+
+    .glitch-text::after {
+      left: 3px;
+      text-shadow: var(--after-shadow);
+      animation: glitch-after var(--after-duration) infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-after {
+      0%   { clip-path: inset(20% 0 50% 0); }
+      5%   { clip-path: inset(10% 0 60% 0); }
+      10%  { clip-path: inset(15% 0 55% 0); }
+      15%  { clip-path: inset(25% 0 35% 0); }
+      20%  { clip-path: inset(30% 0 40% 0); }
+      25%  { clip-path: inset(40% 0 20% 0); }
+      30%  { clip-path: inset(10% 0 60% 0); }
+      35%  { clip-path: inset(15% 0 55% 0); }
+      40%  { clip-path: inset(25% 0 35% 0); }
+      45%  { clip-path: inset(30% 0 40% 0); }
+      50%  { clip-path: inset(20% 0 50% 0); }
+      55%  { clip-path: inset(10% 0 60% 0); }
+      60%  { clip-path: inset(15% 0 55% 0); }
+      65%  { clip-path: inset(25% 0 35% 0); }
+      70%  { clip-path: inset(30% 0 40% 0); }
+      75%  { clip-path: inset(40% 0 20% 0); }
+      80%  { clip-path: inset(20% 0 50% 0); }
+      85%  { clip-path: inset(10% 0 60% 0); }
+      90%  { clip-path: inset(15% 0 55% 0); }
+      95%  { clip-path: inset(25% 0 35% 0); }
+      100% { clip-path: inset(30% 0 40% 0); }
+    }
+
+    @keyframes glitch-before {
+      0%   { clip-path: inset(30% 0 40% 0); }
+      5%   { clip-path: inset(25% 0 35% 0); }
+      10%  { clip-path: inset(15% 0 55% 0); }
+      15%  { clip-path: inset(10% 0 60% 0); }
+      20%  { clip-path: inset(20% 0 50% 0); }
+      25%  { clip-path: inset(30% 0 40% 0); }
+      30%  { clip-path: inset(40% 0 20% 0); }
+      35%  { clip-path: inset(30% 0 40% 0); }
+      40%  { clip-path: inset(25% 0 35% 0); }
+      45%  { clip-path: inset(15% 0 55% 0); }
+      50%  { clip-path: inset(10% 0 60% 0); }
+      55%  { clip-path: inset(20% 0 50% 0); }
+      60%  { clip-path: inset(30% 0 40% 0); }
+      65%  { clip-path: inset(40% 0 20% 0); }
+      70%  { clip-path: inset(25% 0 35% 0); }
+      75%  { clip-path: inset(15% 0 55% 0); }
+      80%  { clip-path: inset(10% 0 60% 0); }
+      85%  { clip-path: inset(20% 0 50% 0); }
+      90%  { clip-path: inset(30% 0 40% 0); }
+      95%  { clip-path: inset(40% 0 20% 0); }
+      100% { clip-path: inset(25% 0 35% 0); }
+    }
+
+    .header-subtitle {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── Form sections ── */
+    .form-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 0;
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .input-group { margin-bottom: 12px; text-align: left; }
+    .input-group:last-child { margin-bottom: 0; }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+
+    input[type="text"]::placeholder { color: #5c5568; }
+
+    input[type="text"]:focus, select:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238f879e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+
+    button {
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    button:active:not(:disabled) { transform: scale(0.97); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    #downloadBtn {
+      background: var(--success);
+      width: 100%;
+      min-width: 0;
+      box-shadow: 0 2px 12px rgba(34, 197, 94, 0.3);
+    }
+    #downloadBtn:hover:not(:disabled) { background: var(--success-hover); }
+    #downloadBtn.downloading {
+      background: #4b5563;
+      color: #d1d5db;
+      cursor: wait;
+      box-shadow: none;
+      animation: download-pulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes download-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+
+    #stopBtn {
+      background: var(--danger);
+      width: 100%;
+      box-shadow: 0 2px 12px rgba(239, 68, 68, 0.25);
+    }
+    #stopBtn:hover { background: var(--danger-hover); }
+
+    #browseBtn {
+      background: var(--browse);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #browseBtn:hover { background: var(--browse-hover); }
+
+    #buttonGroup {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    #folderGroup .folder-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    #folderPath { flex: 1; }
+
+    /* ── Loading & progress ── */
+    #loading-container {
+      display: none;
+      margin: 0;
+      padding: 14px 16px;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--bg-elevated);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loading-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    #chronometer {
+      font-size: 22px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    #progressContainer {
+      display: none;
+      margin-bottom: 0;
+      padding: 12px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: left;
+    }
+
+    #downloadProgress {
+      width: 100%;
+      height: 8px;
+      appearance: none;
+      background: var(--bg-elevated);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    #downloadProgress::-webkit-progress-bar {
+      background: var(--bg-elevated);
+      border-radius: 99px;
+    }
+
+    #downloadProgress::-webkit-progress-value {
+      background: linear-gradient(90deg, #0099cc, var(--accent));
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    #downloadProgress::-moz-progress-bar {
+      background: linear-gradient(90deg, #0099cc, var(--accent));
+      border-radius: 99px;
+    }
+
+    #progressLabel {
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    #progressStats {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Trim panel ── */
+    #trimToggleGroup {
+      display: none;
+      margin-bottom: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      text-align: left;
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+    }
+
+    #trimToggleBtn {
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 0;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    #trimToggleBtn:hover {
+      color: var(--text);
+      background: transparent;
+    }
+
+    #trimPanel {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    #trimPanel.open { display: block; }
+
+    .trim-row { display: flex; gap: 12px; margin-top: 4px; }
+    .trim-row label { flex: 1; font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+    .trim-row input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .trim-row input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    #trimHint {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* ── Log output ── */
+    #logOutput {
+      margin-top: 0;
+      flex: 1;
+      min-height: 140px;
+      overflow: auto;
+      font-size: 12px;
+      font-family: 'Cascadia Code', 'Consolas', 'Menlo', monospace;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      line-height: 1.6;
+      color: #b8b0c8;
+    }
+
+    #logOutput div {
+      padding: 1px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    #logOutput div:last-child { border-bottom: none; }
+
+    /* ── Scrollbar (Win & Mac) ── */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+    /* ── Playlist mode ── */
+    .playlist-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .playlist-actions[hidden],
+    .playlist-selection-panel[hidden] {
+      display: none !important;
+    }
+
+    .btn-primary {
+      background: var(--success);
+      box-shadow: 0 2px 12px rgba(34, 197, 94, 0.3);
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--success-hover); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--bg-elevated);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-link {
+      background: transparent;
+      color: var(--accent);
+      padding: 4px 0;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: none;
+    }
+    .btn-link:hover:not(:disabled) {
+      background: transparent;
+      color: #33c9ff;
+    }
+
+    .playlist-fetch-loading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .playlist-fetch-loading[hidden] {
+      display: none !important;
+    }
+
+    .playlist-fetch-loading .spinner {
+      width: 22px;
+      height: 22px;
+      border-width: 2px;
+      flex-shrink: 0;
+    }
+
+    .playlist-selection-panel {
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .playlist-selection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .playlist-count-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .playlist-track-list {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+
+    .playlist-track-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 6px;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s ease;
+    }
+
+    .playlist-track-item:hover { background: rgba(255, 255, 255, 0.04); }
+
+    .playlist-track-num {
+      flex-shrink: 0;
+      width: 24px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .playlist-track-item input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .playlist-track-thumb {
+      flex-shrink: 0;
+      width: 48px;
+      height: 36px;
+      border-radius: 2px;
+      object-fit: cover;
+      background: var(--bg-input);
+    }
+
+    .playlist-track-thumb.placeholder {
+      display: block;
+    }
+
+    .playlist-track-info {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+    }
+
+    .playlist-track-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .playlist-track-duration {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .playlist-download-selected {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="glitch-text" data-text="yTube → Audio">yTube → Audio</div>
+      <p class="header-subtitle">YouTube to audio converter</p>
+    </header>
+    <section class="form-section">
+      <div class="section-title">Source</div>
+      <div class="input-group">
+        <label for="songInput">Single-song URL</label>
+        <input type="text" id="songInput" placeholder="https://youtube.com/watch?v=…" />
+      </div>
+      <div class="input-group">
+        <label for="playlistInput">Playlist URL</label>
+        <input type="text" id="playlistInput" placeholder="https://youtube.com/playlist?list=…" />
+      </div>
+      <div id="playlistActions" class="playlist-actions" hidden>
+        <button type="button" id="downloadAllBtn" class="btn-primary">Download All</button>
+        <button type="button" id="choosePlaylistBtn" class="btn-secondary">Choose What to Download</button>
+      </div>
+      <div id="playlistFetchLoading" class="playlist-fetch-loading" hidden>
+        <div class="spinner" aria-hidden="true"></div>
+        <span>Fetching playlist…</span>
+      </div>
+      <div id="playlistSelectionPanel" class="playlist-selection-panel" hidden>
+        <div class="playlist-selection-header">
+          <span id="playlistCountLabel" class="playlist-count-label"></span>
+          <button type="button" id="toggleSelectAllBtn" class="btn-link">Select All</button>
+        </div>
+        <div id="playlistTrackList" class="playlist-track-list"></div>
+        <button type="button" id="downloadSelectedBtn" class="btn-primary playlist-download-selected" disabled>Download Selected (0)</button>
+      </div>
+    </section>
+
+    <div id="trimToggleGroup">
+      <button type="button" id="trimToggleBtn">▸ Опции за изрязване</button>
+      <div id="trimPanel">
+        <div class="trim-row">
+          <label>Начало
+            <input type="text" id="trimStart" placeholder="00:01:15 или 01:15" />
+          </label>
+          <label>Край
+            <input type="text" id="trimEnd" placeholder="00:02:30 или 02:30" />
+          </label>
+        </div>
+        <div id="trimHint">Формат: HH:MM:SS или MM:SS. Точно изрязване с --force-keyframes-at-cuts (само единично видео).</div>
+      </div>
+    </div>
+
+    <section class="form-section">
+      <div class="section-title">Output</div>
+      <div class="input-group">
+        <label for="formatSelect">Format</label>
+        <select id="formatSelect">
+          <option value="mp3">MP3 (VBR 0 – best)</option>
+          <option value="flac">FLAC</option>
+          <option value="wav">WAV</option>
+        </select>
+      </div>
+      <div class="input-group" id="folderGroup">
+        <label for="folderPath">Save to folder</label>
+        <div class="folder-row">
+          <input type="text" id="folderPath" readonly placeholder="" />
+          <button id="browseBtn">Browse…</button>
+        </div>
+      </div>
+    </section>
+    <div id="buttonGroup">
+      <button id="downloadBtn">Download</button>
+      <button id="stopBtn">Stop</button>
+    </div>
+    <div id="loading-container">
+      <div class="spinner" aria-hidden="true"></div>
+      <div id="loading-label">Loading</div>
+      <div id="chronometer">00:00:00</div>
+    </div>
+    <div id="progressContainer">
+      <progress id="downloadProgress" max="100" value="0"></progress>
+      <div id="progressLabel">0%</div>
+      <div id="progressStats">
+        <span id="progressSpeed">—</span>
+        <span id="progressEta">ETA —</span>
+      </div>
+    </div>
+    <div id="logOutput"></div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>

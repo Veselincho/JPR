@@ -1,0 +1,1 @@
+command -v brew &>/dev/null || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; for p in /opt/homebrew/bin/brew /usr/local/bin/brew; do [ -x "$p" ] && eval "$("$p" shellenv)" && break; done; brew update && brew install ffmpeg node yt-dlp; brew upgrade ffmpeg node yt-dlp
